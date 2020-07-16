@@ -21,7 +21,7 @@ class BackgroundWeather:
         while not self.bot.is_closed():
             now = datetime.strftime(datetime.now(), time_format)
             if now == self.TIMES[0]:
-                embed = self.weather.get_weather_report(self.CURRENT_CITY)
+                embed = await self.weather.get_weather_report(self.CURRENT_CITY)
                 channel = self.bot.get_channel(int(os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')))
                 await channel.send(f'This is your {self.TIMES[0]} weather report')
                 await channel.send(embed=embed)

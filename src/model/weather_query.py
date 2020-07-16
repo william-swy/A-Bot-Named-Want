@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 import os
 from discord.ext import commands
 from discord import Embed
@@ -14,7 +14,7 @@ class GetWeather(commands.Cog):
 
     @commands.command()
     async def weather(self, ctx: commands.Context, city):
-        embed = self.weather_report.get_weather_report(city)
+        embed = await self.weather_report.get_weather_report(city)
         await ctx.send(embed=embed)
 
 
@@ -28,29 +28,30 @@ class Weather:
         self.WEATHER_KEY = os.getenv('WEATHER_TOKEN')
 
     # makes api request and returns temperature, feels like temp, pressure, humidity and description
-    def basic_search(self, city):
+    async def basic_search(self, city):
         complete_url = self.BASE_DAILY_WEATHER_URL.format(city_name=city, key=self.WEATHER_KEY)
-        response = requests.get(complete_url)
-        data = response.json()
-        if data['cod'] != '404':
-            specific_info = data['main']
-            current_temperature = self.kelvin_to_celsius(specific_info['temp']) + u'\u2103'
-            feels_like = self.kelvin_to_celsius(specific_info['feels_like']) + u'\u2103'
-            current_pressure = str(specific_info['pressure']) + ' hPa'
-            current_humidity = str(specific_info['humidity']) + r' (percentage)'
-            weather_description = data['weather'][0]['description']
-            icon = data['weather'][0]['icon']
-            country = data['sys']['country']
-            city = data['name']
-            place = city + ', ' + country
-            return \
-                [current_temperature, feels_like, current_pressure, current_humidity, weather_description, place], icon
-        else:
-            raise custom_errors.NoCityFound()
+        async with aiohttp.ClientSession() as session:
+            async with session.get(complete_url) as response:
+                data = await response.json()
+                if data['cod'] != '404':
+                    specific_info = data['main']
+                    current_temperature = self.kelvin_to_celsius(specific_info['temp']) + u'\u2103'
+                    feels_like = self.kelvin_to_celsius(specific_info['feels_like']) + u'\u2103'
+                    current_pressure = str(specific_info['pressure']) + ' hPa'
+                    current_humidity = str(specific_info['humidity']) + r' (percentage)'
+                    weather_description = data['weather'][0]['description']
+                    icon = data['weather'][0]['icon']
+                    country = data['sys']['country']
+                    city = data['name']
+                    place = city + ', ' + country
+                    return \
+                        [current_temperature, feels_like, current_pressure, current_humidity, weather_description, place], icon
+                else:
+                    raise custom_errors.NoCityFound()
 
     # create a embed with the weather data
-    def get_weather_report(self, city):
-        weather_data, icon = self.basic_search(city)
+    async def get_weather_report(self, city):
+        weather_data, icon = await self.basic_search(city)
         icon_url = self.grab_icon(icon)
         weather_descriptions = ['Current temperature', 'Feels like', 'Current pressure',
                                 'Current humidity', 'Weather description']
