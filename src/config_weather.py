@@ -1,5 +1,4 @@
 import re
-import sys
 import dotenv
 import requests
 import os
@@ -56,5 +55,3 @@ if __name__ == "__main__":
         city.write(list_of_cities)
         time.write(list_of_times)
         print("Cities and times successfully set")
-
-    sys.exit(0)

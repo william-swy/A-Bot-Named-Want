@@ -14,4 +14,3 @@ if __name__ == "__main__":
         file.write(str(prefix))
         print("Prefix " + prefix + " successfully set")
 
-    sys.exit(0)
