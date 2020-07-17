@@ -17,13 +17,18 @@ if __name__ == "__main__":
     BOT_COMMAND_PREFIX = '<@&724830609238917192>'
     TOKEN = os.getenv('DISCORD_TOKEN')
     GENERAL_CHANNEL_ID = os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')
+    PREFIX_DIR = utils.DATA_DIR + '\\prefix.txt'
+
+    # get prefix from file
+    with open(PREFIX_DIR, 'r') as file:
+        prefix = file.read()
+        file.close()
 
     # initialize bot
-    bot = commands.Bot(command_prefix='?', description='A multipurpose bot')
+    bot = commands.Bot(command_prefix=prefix, description='A multipurpose bot')
     bot.remove_command("help")
 
     # add cogs
-    # todo: add cogs
     bot.add_cog(member_manager.MemberManager(bot))
     bot.add_cog(general_message.GeneralMessage(bot))
     bot.add_cog(general_error_handler.GeneralErrorHandler(bot))
@@ -44,6 +49,8 @@ if __name__ == "__main__":
 
     # initialize the scheduled weather reports
     weather_man = background_weather.BackgroundWeather(bot)
+    bot.loop.run_until_complete(weather_man.initialize_settings())
+    bot.loop.create_task(weather_man.meteorology_report())
 
     # run bot
     bot.run(TOKEN)

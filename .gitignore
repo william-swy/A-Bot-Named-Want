@@ -1,5 +1,5 @@
-# ignore API keys
 .env
 *.log
 *.mp3
 cached_music_dict.json
+*.txt

@@ -3,17 +3,19 @@ import os
 from datetime import datetime
 from discord.ext import commands
 import weather_query
+from utils import DATA_DIR
 
 
 # schedules bot to send weather reports at specified times
 class BackgroundWeather:
-    TIMES = ['09:00', '12:00', '21:00']
-    CURRENT_CITY = 'calgary'
+    CITY_DIR = DATA_DIR + "\\weather\\city.txt"
+    TIMES_DIR = DATA_DIR + "\\weather\\times.txt"
+    TIMES = None
+    CURRENT_CITY = None
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.weather = weather_query.Weather()
-        self.bot.loop.create_task(self.meteorology_report())
 
     async def meteorology_report(self):
         time_format = '%H:%M'
@@ -21,10 +23,14 @@ class BackgroundWeather:
         while not self.bot.is_closed():
             now = datetime.strftime(datetime.now(), time_format)
             if now == self.TIMES[0]:
-                embed = await self.weather.get_weather_report(self.CURRENT_CITY)
                 channel = self.bot.get_channel(int(os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')))
                 await channel.send(f'This is your {self.TIMES[0]} weather report')
-                await channel.send(embed=embed)
+
+                # send reports for all cities
+                for city in self.CURRENT_CITY:
+                    embed = await self.weather.get_weather_report(city)
+                    await channel.send(embed=embed)
+
                 first_time = self.TIMES[0]
                 self.TIMES.pop(0)
                 self.TIMES.append(first_time)
@@ -32,3 +38,13 @@ class BackgroundWeather:
             else:
                 delay_time = 1
             await asyncio.sleep(delay_time)
+
+    # get cities and times
+    async def initialize_settings(self):
+        with open(self.CITY_DIR, 'r') as city, open(self.TIMES_DIR) as times:
+            self.CURRENT_CITY = city.read().split("/")
+            self.TIMES = times.read().split(",")
+
+            # remove delimiters
+            del self.CURRENT_CITY[0]
+            del self.TIMES[0]

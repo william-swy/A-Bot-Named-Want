@@ -125,7 +125,7 @@ class Music(commands.Cog):
             # prevent a currently queued song from being deleted
             for song in self.queues:
                 if song in oldest_file:
-                    raise custom_errors.TooManySongs
+                    raise custom_errors.TooManySongs()
 
             os.remove(oldest_file)
             await self.delete_song_data(oldest_file)

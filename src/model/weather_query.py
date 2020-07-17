@@ -45,7 +45,12 @@ class Weather:
                     city = data['name']
                     place = city + ', ' + country
                     return \
-                        [current_temperature, feels_like, current_pressure, current_humidity, weather_description, place], icon
+                        [current_temperature,
+                         feels_like,
+                         current_pressure,
+                         current_humidity,
+                         weather_description,
+                         place], icon
                 else:
                     raise custom_errors.NoCityFound()
 

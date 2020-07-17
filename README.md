@@ -13,7 +13,17 @@ Made with Discord.py
 * Schedules weather reports at 09:00, 12:00, 21:00
 * Welcomes new members
 
-### **Installation**
+### **Usage**
 1. Download ffmpeg and add to PATH
 2. create `.\Discord-Bot\data\.env` file with discord, youtube API and openweathermap tokens
-3. run `main.py` and type `?help` to see full list of commands
+3. Run Bot Command and Weather Report configs, see instructions below
+4. run `main.py` and type `?help` to see full list of commands
+
+### **Configure Bot Command Prefix**
+1. Run `src\config_prefix.py`
+2. Input your one letter prefix
+
+### **Configure Timed Weather Reports**
+1. Run `src\config_weather.py`
+2. Input city names, `<city name>`. Add `<state code, ISO 3166 country code>` to input if need to specify
+3. Input local times as in 24 hour format(ie. `02:00` for 2:00 am and `14:00` for 2:00 pm)
