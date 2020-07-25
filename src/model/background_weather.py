@@ -3,13 +3,11 @@ import os
 from datetime import datetime
 from discord.ext import commands
 import weather_query
-from utils import DATA_DIR
+from utils import CITY_DIR, TIMES_DIR
 
 
 # schedules bot to send weather reports at specified times
 class BackgroundWeather:
-    CITY_DIR = DATA_DIR + "\\weather\\city.txt"
-    TIMES_DIR = DATA_DIR + "\\weather\\times.txt"
     TIMES = None
     CURRENT_CITY = None
 
@@ -41,7 +39,7 @@ class BackgroundWeather:
 
     # get cities and times
     async def initialize_settings(self):
-        with open(self.CITY_DIR, 'r') as city, open(self.TIMES_DIR) as times:
+        with open(CITY_DIR, 'r') as city, open(TIMES_DIR) as times:
             self.CURRENT_CITY = city.read().split("/")
             self.TIMES = times.read().split(",")
 

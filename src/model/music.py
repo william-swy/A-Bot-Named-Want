@@ -16,9 +16,9 @@ import youtube_query
 class Music(commands.Cog):
     YOUTUBE_URL_BASE = 'https://www.youtube.com/watch?v='
     DATA_DIR = utils.DATA_DIR
-    CACHED_DIR = f'{DATA_DIR}//cached_music'
-    MUSIC_DICT_DIR = f'{CACHED_DIR}//cached_music_dict.json'
-    CACHED_MUSIC_DIR = f'{CACHED_DIR}//music'
+    CACHED_DIR = os.path.join(DATA_DIR, 'cached_music')
+    MUSIC_DICT_DIR = os.path.join(CACHED_DIR, 'cached_music_dict.json')
+    CACHED_MUSIC_DIR = os.path.join(CACHED_DIR, 'music')
     CACHED_SONG_QUOTA = 50
 
     def __init__(self, bot: commands.Bot):
@@ -114,7 +114,7 @@ class Music(commands.Cog):
     # ensure cache size limit is not exceeded
     # remove oldest cached song when quota is reached
     async def check_cache_size(self):
-        song_paths = self.CACHED_DIR + '\\music'
+        song_paths = self.CACHED_MUSIC_DIR
         list_of_song_paths = os.listdir(song_paths)
         num_song_cached = len(list_of_song_paths)
 

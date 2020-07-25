@@ -6,9 +6,6 @@ from model import utils
 
 # sets cities and times for weather report
 
-CITY_DIR = utils.DATA_DIR + "\\weather\\city.txt"
-TIMES_DIR = utils.DATA_DIR + "\\weather\\times.txt"
-
 
 # return true if time_input is valid 24hr time, else return false
 def valid_time(time_input):
@@ -51,7 +48,7 @@ if __name__ == "__main__":
             continue
         list_of_times = list_of_times + ',' + time
 
-    with open(CITY_DIR, 'w') as city, open(TIMES_DIR, 'w') as time:
+    with open(utils.CITY_DIR, 'w') as city, open(utils.TIMES_DIR, 'w') as time:
         city.write(list_of_cities)
         time.write(list_of_times)
         print("Cities and times successfully set")

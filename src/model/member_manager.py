@@ -28,9 +28,3 @@ class MemberManager(commands.Cog):
         else:
             await member.dm_channel.send("Welcome Back! YAY! YAY!")
             await general_channel.send(f'{member.name} IS BACK.. WITH SOME SNACKS!')
-
-    # sends private message to member when they leave
-    @commands.Cog.listener()
-    async def on_member_remove(self, member):
-        await member.create_dm()
-        await member.dm_channel.send("Sorry to see you go ;(\n Hope you come back with some snacks!")

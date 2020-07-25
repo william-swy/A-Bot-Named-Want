@@ -1,4 +1,3 @@
-import sys
 from model import utils
 
 # sets bot command prefix
@@ -10,7 +9,7 @@ if __name__ == "__main__":
             break
         print("Inputted prefix was not one letter long, try again")
 
-    with open(utils.DATA_DIR + "\\prefix.txt", 'w') as file:
+    with open(utils.PREFIX_DIR, 'w') as file:
         file.write(str(prefix))
         print("Prefix " + prefix + " successfully set")
 

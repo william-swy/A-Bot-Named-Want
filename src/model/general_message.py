@@ -12,8 +12,17 @@ class GeneralMessage(commands.Cog):
         self.member_name = None
 
     @commands.command()
-    async def who(self, ctx: commands.Context, *args):
-        if len(args) == 2:
+    async def who(self, ctx: commands.Context, *, args):
+        lower_args = args.lower()
+        if lower_args.find("are you") == 0:
+            await ctx.send("a sPIRITUAL lYRICAL mIRACLE iNDIVIDUAL")
+            await ctx.send(file=File(utils.YES_PATH))
+        elif lower_args.find("made you") == 0:
+            await ctx.send("Made by the magnificent Pectacius")
+        else:
+            await ctx.send("Sorry didn't understand that")
+
+        """if len(args) == 2:
             if args[1] == "you?" or args[1] == "you":
                 if args[0] == "are":
                     await ctx.send("a sPIRITUAL lYRICAL mIRACLE iNDIVIDUAL")
@@ -25,7 +34,7 @@ class GeneralMessage(commands.Cog):
             else:
                 raise commands.CommandNotFound
         else:
-            raise commands.CommandNotFound
+            raise commands.CommandNotFound"""
 
     @commands.command()
     async def hi(self, ctx: commands.Context):

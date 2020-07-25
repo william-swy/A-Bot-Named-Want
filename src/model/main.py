@@ -17,10 +17,9 @@ if __name__ == "__main__":
     BOT_COMMAND_PREFIX = '<@&724830609238917192>'
     TOKEN = os.getenv('DISCORD_TOKEN')
     GENERAL_CHANNEL_ID = os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')
-    PREFIX_DIR = utils.DATA_DIR + '\\prefix.txt'
 
     # get prefix from file
-    with open(PREFIX_DIR, 'r') as file:
+    with open(utils.PREFIX_DIR, 'r') as file:
         prefix = file.read()
         file.close()
 
