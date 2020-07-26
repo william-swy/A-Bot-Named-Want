@@ -1,4 +1,3 @@
-# establish connection to youtube API, queries for an video url
 import os
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
@@ -7,6 +6,7 @@ import utils
 
 
 class YoutubeQuery:
+    """makes requests to google api"""
     YOUTUBE_API_SERVICE_NAME = 'youtube'
     YOUTUBE_API_VERSION = 'v3'
     SEARCH_TIMES = 3
@@ -16,8 +16,8 @@ class YoutubeQuery:
         load_dotenv(utils.ENV_PATH)
         self.DEVELOPER_KEY = os.getenv('YOUTUBE_TOKEN')
 
-    # returns the url of the search keyword based on relevance
     def search_youtube(self, q, order='relevance', token=None, times=SEARCH_TIMES) -> str:
+        """returns the url of the youtube search keyword based on relevance"""
         counter = times
         youtube = build(self.YOUTUBE_API_SERVICE_NAME, self.YOUTUBE_API_VERSION, developerKey=self.DEVELOPER_KEY)
         search_response = youtube.search().list(
@@ -36,8 +36,8 @@ class YoutubeQuery:
         url = self.find_url(q, search_response, counter)
         return url
 
-    # searches next page if first page cannot find a video
     def find_url(self, q, response, counter) -> str:
+        """searches next page if first page cannot find a video"""
         result = None
         for search_result in response.get('items', []):
             if search_result['id']['kind'] == 'youtube#video':

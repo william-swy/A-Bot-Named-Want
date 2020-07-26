@@ -1,18 +1,18 @@
-# Error representing no member found
 class NoMemberError(Exception):
+    """Error representing no member found"""
     pass
 
 
-# Error representing no media found from query
 class CannotFindMedia(Exception):
+    """Error representing no media found from youtube query"""
     pass
 
 
-# Error representing too many currently used songs
 class TooManySongs(Exception):
+    """Error representing too many songs in cache"""
     pass
 
 
-# Error representing no city found
 class NoCityFound(Exception):
+    """Error representing no city found"""
     pass

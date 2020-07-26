@@ -6,16 +6,17 @@ import weather_query
 from utils import CITY_DIR, TIMES_DIR
 
 
-# schedules bot to send weather reports at specified times
 class BackgroundWeather:
+    """schedules bot to send weather reports at specified times"""
     TIMES = None
     CURRENT_CITY = None
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.weather = weather_query.Weather()
 
-    async def meteorology_report(self):
+    async def meteorology_report(self) -> None:
+        """sends a weather report at when current time matches designated time"""
         time_format = '%H:%M'
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
@@ -37,8 +38,8 @@ class BackgroundWeather:
                 delay_time = 1
             await asyncio.sleep(delay_time)
 
-    # get cities and times
-    async def initialize_settings(self):
+    async def initialize_settings(self) -> None:
+        """reads and parses city.txt and times.txt to set designated cities and times"""
         with open(CITY_DIR, 'r') as city, open(TIMES_DIR) as times:
             self.CURRENT_CITY = city.read().split("/")
             self.TIMES = times.read().split(",")

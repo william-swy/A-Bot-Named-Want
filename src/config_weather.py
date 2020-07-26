@@ -8,7 +8,7 @@ from model import utils
 
 
 # return true if time_input is valid 24hr time, else return false
-def valid_time(time_input):
+def valid_time(time_input) -> bool:
     pattern = re.compile(r'((([0-1]\d)|(2[0-3])):[0-5]\d)|24:00')
     if pattern.match(time_input) is None:
         return False
@@ -16,7 +16,7 @@ def valid_time(time_input):
 
 
 # return true if city_input is valid city name, else return false
-def valid_city(city_input):
+def valid_city(city_input)-> bool:
     key = os.getenv('WEATHER_TOKEN')
     url = r'http://api.openweathermap.org/data/2.5/weather?q=' + city_input + '&appid=' + key
     response = requests.get(url)

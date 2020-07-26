@@ -3,6 +3,7 @@ import json
 import os
 import shutil
 import re
+import typing
 
 import youtube_dl
 from discord import FFmpegPCMAudio, PCMVolumeTransformer, Embed, File
@@ -15,6 +16,7 @@ import youtube_query
 
 
 class Music(commands.Cog):
+    """Plays music based on mp3"""
     YOUTUBE_URL_BASE = 'https://www.youtube.com/watch?v='
     DATA_DIR = utils.DATA_DIR
     CACHED_DIR = os.path.join(DATA_DIR, 'cached_music')
@@ -33,9 +35,9 @@ class Music(commands.Cog):
         self.is_playing = asyncio.Event()
         self.is_waiting = asyncio.Event()
 
-    # plays song in voice client
     @commands.command()
-    async def play(self, ctx: commands.Context, *args) -> None:
+    async def play(self, ctx: commands.Context, *, args: typing.Optional[str] = '') -> None:
+        """plays song in voice client"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         # check if command can be called
@@ -74,8 +76,8 @@ class Music(commands.Cog):
         self.playing = asyncio.create_task(self.loop(ctx, voice))
         self.is_waiting.set()  # awaken task to start playing queue
 
-    # play until queue is empty, latch system to make sure current song is done before playing next
     async def loop(self, ctx, voice) -> None:
+        """play until queue is empty, latch system to make sure current song is done before playing next"""
         while len(self.queues) > 0:
             self.is_playing.clear()
             await self.is_waiting.wait()
@@ -83,15 +85,15 @@ class Music(commands.Cog):
             await ctx.send('playing song')
             await self.is_playing.wait()
 
-    # remove finished song from queue
     def _delete(self, e) -> None:
+        """remove finished song from queue"""
         self.queues.pop(0)
         self.is_playing.set()
         if len(self.queues) == 0:
             self.is_waiting.clear()
 
-    # return true if song is cached, otherwise false
     async def is_song_cached(self) -> bool:
+        """return true if song is cached, otherwise false"""
         if os.path.isfile(self.MUSIC_DICT_DIR):
             json_file = open(self.MUSIC_DICT_DIR, 'r')
             data = json.load(json_file)
@@ -107,15 +109,15 @@ class Music(commands.Cog):
             json_file.close()
         return False
 
-    # play mp3 of song in voice channel
     def play_audio(self, voice) -> None:
+        """play mp3 of song in voice channel"""
         voice.play(FFmpegPCMAudio(os.path.join(self.CACHED_MUSIC_DIR, self.queues[0])), after=self._delete)
         voice.source = PCMVolumeTransformer(voice.source)
         voice.source.volume = 0.07
 
-    # ensure cache size limit is not exceeded
-    # remove oldest cached song when quota is reached
     async def check_cache_size(self) -> None:
+        """ensure cache size limit is not exceeded
+        remove oldest cached song when quota is reached"""
         song_paths = self.CACHED_MUSIC_DIR
         list_of_song_paths = os.listdir(song_paths)
         num_song_cached = len(list_of_song_paths)
@@ -132,8 +134,8 @@ class Music(commands.Cog):
             os.remove(oldest_file)
             await self.delete_song_data(oldest_file)
 
-    # removes the specified song data from cached_music_dict.json
     async def delete_song_data(self, file_name) -> None:
+        """removes the specified song data from cached_music_dict.json"""
         json_file_read = open(self.MUSIC_DICT_DIR, 'r')
         data = json.load(json_file_read)
         json_file_read.close()
@@ -152,7 +154,7 @@ class Music(commands.Cog):
             json_file_write.close()
 
     async def move_to_cache(self) -> None:
-        # move file to cached_music folder
+        """move file to cached_music folder"""
         for file in os.listdir(utils.MAIN_DIR):
             if file.endswith('.mp3'):
                 self.name = file
@@ -162,8 +164,8 @@ class Music(commands.Cog):
         # update song data
         await self.add_song_data(file=self.name, url=self.url)
 
-    # adds song data to file
     async def add_song_data(self, file, url) -> None:
+        """adds song data to file"""
         # check if there is a file, if not create one
         if not os.path.isfile(self.MUSIC_DICT_DIR):
             cached_music_file = open(self.MUSIC_DICT_DIR, 'w')
@@ -188,8 +190,8 @@ class Music(commands.Cog):
             json.dump(data, json_file_write)
             json_file_write.close()
 
-    # downloads music from url
     async def download_music(self) -> None:
+        """downloads music from url"""
         ydl_opts = {
             'format': 'bestaudio/best',
             'quiet': True,
@@ -203,18 +205,17 @@ class Music(commands.Cog):
             print('Downloading audio now\n')
             ydl.download([self.url])
 
-    # gets url of youtube video
     async def get_url(self, args) -> None:
-        if len(args) == 1 and self.YOUTUBE_URL_BASE in args[0]:
-            self.url = args[0]
+        """gets url of youtube video"""
+        if self.YOUTUBE_URL_BASE in args:
+            self.url = args
         else:
-            keywords = ' '.join(args)
             youtube_search = youtube_query.YoutubeQuery()
-            self.url = youtube_search.search_youtube(keywords)
+            self.url = youtube_search.search_youtube(args)
 
-    # pauses current playing song
     @commands.command()
     async def pause(self, ctx: commands.Context) -> None:
+        """pauses current playing song"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         if voice and voice.is_playing():
@@ -225,9 +226,9 @@ class Music(commands.Cog):
             print('Music not playing, failed pause')
             await ctx.send('Music not playing, failed pause')
 
-    # resumes current paused song
     @commands.command()
     async def resume(self, ctx: commands.Context) -> None:
+        """resumes current paused song"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         if voice and voice.is_paused():
@@ -238,9 +239,9 @@ class Music(commands.Cog):
             print('Music is not paused, failed resume')
             await ctx.send('Music is not paused, failed resume')
 
-    # skips to next song in queue
     @commands.command()
     async def skip(self, ctx: commands.Context) -> None:
+        """skips to next song in queue"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         if voice and voice.is_playing():
@@ -257,9 +258,9 @@ class Music(commands.Cog):
             print('No music playing, failed to skip')
             await ctx.send('No music playing, failed to skip')
 
-    # add a song to the queue
     @commands.command()
     async def queue(self, ctx: commands.Context, *args) -> None:
+        """add a song to the queue"""
         if len(args) == 0:
             await ctx.send('Give me a song to play')
             return
@@ -278,14 +279,15 @@ class Music(commands.Cog):
 
         await ctx.send('Song added to queue')
 
-    # removes all songs from queue
     @commands.command()
     async def clear(self, ctx: commands.Context) -> None:
+        """removes all songs from queue"""
         self.queues = []
         await ctx.send("Queues cleared!")
 
-    # returns an embed of the songs currently in queue
     def song_embed(self) -> tuple:
+        """returns an embed of the songs currently in queue"""
+
         def get_song_name(name) -> list:
             bracket_regex = r'\(.*\)'
             parenth_regex = r'\[.*\]'
@@ -320,6 +322,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def songs(self, ctx: commands.Context) -> None:
+        """shows all songs in queue"""
         file = self.song_embed()[1]
         embed = self.song_embed()[0]
         await ctx.send(file=file, embed=embed)

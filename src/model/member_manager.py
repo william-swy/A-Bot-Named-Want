@@ -4,15 +4,15 @@ from discord import File
 from discord.ext import commands
 
 
-# handles member join and leave
 class MemberManager(commands.Cog):
+    """handles member join and leave"""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    # sends general to guild and private to member when new member joins,
-    # will send special image if member is new to guild
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        """sends general to guild and private to member when new member joins,
+        will send special image if member is new to guild"""
         general_channel_id = int(os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID'))
         general_channel = self.bot.get_channel(general_channel_id)
 

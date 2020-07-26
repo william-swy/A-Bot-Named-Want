@@ -6,13 +6,14 @@ import utils
 
 
 class GeneralMessage(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.previous_member = None
         self.member_name = None
 
     @commands.command()
-    async def who(self, ctx: commands.Context, *, args):
+    async def who(self, ctx: commands.Context, *, args) -> None:
+        """sends a message on the who the bot is and the bot's maker"""
         lower_args = args.lower()
         if lower_args.find("are you") == 0:
             await ctx.send("a sPIRITUAL lYRICAL mIRACLE iNDIVIDUAL")
@@ -23,7 +24,8 @@ class GeneralMessage(commands.Cog):
             await ctx.send("Sorry didn't understand that")
 
     @commands.command()
-    async def hi(self, ctx: commands.Context):
+    async def hi(self, ctx: commands.Context) -> None:
+        """Sends a message to greet the user, sends special message if member says hi more than once in a row"""
         author = ctx.author
         if self.previous_member is None or self.previous_member.id != author.id:
             await ctx.send(f'Greetings {author.name}')
@@ -59,7 +61,8 @@ class GeneralMessage(commands.Cog):
         await ctx.send(embed=msg)
 
     @commands.command()
-    async def roast(self, ctx: commands.Context, member):
+    async def roast(self, ctx: commands.Context, member) -> None:
+        """pings selected member with a roast"""
         guild_members = self.bot.get_all_members()
         member_obj = await commands.MemberConverter().convert(ctx, member)
 
@@ -86,12 +89,14 @@ class GeneralMessage(commands.Cog):
 
     @commands.command()
     async def flip_coin(self, ctx: commands.Context, number: int):
+        """flips a coin <number> amount of times and sends result in chat"""
         for times in range(number):
             result = random.choice(['Heads', 'Tails'])
             await ctx.send(result)
 
     @commands.command()
     async def roll_dice(self, ctx: commands.Context, sides: int, number: int):
+        """rolls a <sides> side die <number> amount of times and sends result in chat"""
         for times in range(number):
             result = random.choice(range(1, sides + 1))
             await ctx.send(f'{result}')

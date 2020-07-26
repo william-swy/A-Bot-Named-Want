@@ -6,20 +6,21 @@ import custom_errors
 from decimal import Decimal
 
 
-# adds command to allow to get current weather of a city
 class GetWeather(commands.Cog):
+    """adds command to allow to get current weather of a city"""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.weather_report = Weather()
 
     @commands.command()
     async def weather(self, ctx: commands.Context, city):
+        """sends a weather report in chat of requested city"""
         embed = await self.weather_report.get_weather_report(city)
         await ctx.send(embed=embed)
 
 
-# make api request to openweathermap
 class Weather:
+    """make api request to openweathermap"""
     BASE_DAILY_WEATHER_URL = r'http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={key}'
     BASE_WEATHER_EMOJI_URL = r'http://openweathermap.org/img/wn/{emoji}@2x.png'
     KELVIN_CELSIUS_DIFF = -273.15
@@ -27,8 +28,8 @@ class Weather:
     def __init__(self):
         self.WEATHER_KEY = os.getenv('WEATHER_TOKEN')
 
-    # makes api request and returns temperature, feels like temp, pressure, humidity and description
     async def basic_search(self, city):
+        """makes api request and returns temperature, feels like temp, pressure, humidity and description"""
         complete_url = self.BASE_DAILY_WEATHER_URL.format(city_name=city, key=self.WEATHER_KEY)
         async with aiohttp.ClientSession() as session:
             async with session.get(complete_url) as response:
@@ -54,8 +55,8 @@ class Weather:
                 else:
                     raise custom_errors.NoCityFound()
 
-    # create a embed with the weather data
     async def get_weather_report(self, city):
+        """"create a embed with the weather data"""
         weather_data, icon = await self.basic_search(city)
         icon_url = self.grab_icon(icon)
         weather_descriptions = ['Current temperature', 'Feels like', 'Current pressure',
@@ -66,10 +67,10 @@ class Weather:
         embed.set_image(url=icon_url)
         return embed
 
-    # returns url of png corresponding to the inputted icon encoding
     def grab_icon(self, icon):
+        """returns url of png corresponding to the inputted icon encoding"""
         return self.BASE_WEATHER_EMOJI_URL.format(emoji=icon)
 
-    # converts a kelvin Decimal to a celsius string to 2 decimal places
     def kelvin_to_celsius(self, temp):
+        """converts a kelvin Decimal to a celsius string to 2 decimal places"""
         return str(round(Decimal(temp) + Decimal(self.KELVIN_CELSIUS_DIFF), 2))

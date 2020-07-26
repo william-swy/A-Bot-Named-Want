@@ -2,13 +2,14 @@ from discord.ext import commands
 from custom_errors import *
 
 
-# Handles errors thrown from commands
 class GeneralErrorHandler(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    """sends message on about on not able to execute a command"""
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error):
+    async def on_command_error(self, ctx: commands.Context, error) -> None:
+        """catches exceptions and sends message relating to exception"""
         if isinstance(error, commands.CommandNotFound):
             await ctx.send('Sorry I did not catch that... type "?help" to see what I can do;) ')
         elif isinstance(error, NoMemberError):

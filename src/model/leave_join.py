@@ -2,14 +2,14 @@ from discord.ext import commands
 from discord.utils import get
 
 
-# commands to let bot join and leave voice channels
 class LeaveJoin(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    """commands to let bot join and leave voice channels"""
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-    # bot will join your current voice channel. If bot is in another channel, it will join your current channel
     @commands.command()
-    async def join(self, ctx: commands.Context):
+    async def join(self, ctx: commands.Context) -> None:
+        """bot will join your current voice channel. If bot is in another channel, it will join your current channel"""
         channel = ctx.author.voice.channel
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
@@ -20,9 +20,9 @@ class LeaveJoin(commands.Cog):
 
         await ctx.send(f'Joined {channel}')
 
-    # bot will leave your current voice channel
     @commands.command()
-    async def leave(self, ctx: commands.Context):
+    async def leave(self, ctx: commands.Context) -> None:
+        """bot will leave your current voice channel"""
         channel = ctx.author.voice.channel
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
