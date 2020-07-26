@@ -10,12 +10,13 @@ Made with Discord.py
 * Adds new music to a queue
 * Pause, resume and skip music at your leisure
 * Get the current weather of a city
-* Schedules weather reports at 09:00, 12:00, 21:00
+* Schedules weather reports
 * Welcomes new members
 
 ### **Usage**
 1. Download ffmpeg and add to PATH
-2. create `.\Discord-Bot\data\.env` file with discord, youtube API and openweathermap tokens
+2. create `.\Discord-Bot\data\.env` file with discord, youtube API and openweathermap tokens 
+(use `.\Discord-Bot\data\template.env`) as template if desired
 3. Run Bot Command and Weather Report configs, see instructions below
 4. run `main.py` and type `?help` to see full list of commands
 
