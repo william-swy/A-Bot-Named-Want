@@ -12,12 +12,12 @@ class YoutubeQuery:
     SEARCH_TIMES = 3
     YOUTUBE_URL = 'https://www.youtube.com/watch?v='
 
-    def __init__(self):
+    def __init__(self) -> None:
         load_dotenv(utils.ENV_PATH)
         self.DEVELOPER_KEY = os.getenv('YOUTUBE_TOKEN')
 
     # returns the url of the search keyword based on relevance
-    def search_youtube(self, q, order='relevance', token=None, times=SEARCH_TIMES):
+    def search_youtube(self, q, order='relevance', token=None, times=SEARCH_TIMES) -> str:
         counter = times
         youtube = build(self.YOUTUBE_API_SERVICE_NAME, self.YOUTUBE_API_VERSION, developerKey=self.DEVELOPER_KEY)
         search_response = youtube.search().list(
@@ -37,7 +37,7 @@ class YoutubeQuery:
         return url
 
     # searches next page if first page cannot find a video
-    def find_url(self, q, response, counter):
+    def find_url(self, q, response, counter) -> str:
         result = None
         for search_result in response.get('items', []):
             if search_result['id']['kind'] == 'youtube#video':
@@ -53,7 +53,7 @@ class YoutubeQuery:
         return result
 
 
+# test youtube search results
 if __name__ == "__main__":
     test = YoutubeQuery()
-    print(test.DEVELOPER_KEY)
     print(test.search_youtube('despacito'))

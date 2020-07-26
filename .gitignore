@@ -3,3 +3,6 @@
 *.mp3
 cached_music_dict.json
 *.txt
+*.jpg
+*.png
+*.gif

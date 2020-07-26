@@ -1,7 +1,7 @@
 import os
 
 import background_weather
-import bot_leave_join
+import leave_join
 import general_error_handler
 import general_message
 import member_manager
@@ -25,7 +25,7 @@ if __name__ == "__main__":
     bot.add_cog(member_manager.MemberManager(bot))
     bot.add_cog(general_message.GeneralMessage(bot))
     bot.add_cog(general_error_handler.GeneralErrorHandler(bot))
-    bot.add_cog(bot_leave_join.LeaveJoin(bot))
+    bot.add_cog(leave_join.LeaveJoin(bot))
     bot.add_cog(music.Music(bot))
     bot.add_cog(weather_query.GetWeather(bot))
 
