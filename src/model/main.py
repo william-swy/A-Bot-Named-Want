@@ -14,17 +14,11 @@ from dotenv import load_dotenv
 if __name__ == "__main__":
     load_dotenv(utils.ENV_PATH)
 
-    BOT_COMMAND_PREFIX = '<@&724830609238917192>'
     TOKEN = os.getenv('DISCORD_TOKEN')
     GENERAL_CHANNEL_ID = os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')
 
-    # get prefix from file
-    with open(utils.PREFIX_DIR, 'r') as file:
-        prefix = file.read()
-        file.close()
-
     # initialize bot
-    bot = commands.Bot(command_prefix=prefix, description='A multipurpose bot')
+    bot = commands.Bot(command_prefix=utils.PREFIX, description='A multipurpose bot')
     bot.remove_command("help")
 
     # add cogs

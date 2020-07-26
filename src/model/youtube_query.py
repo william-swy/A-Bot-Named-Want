@@ -51,3 +51,9 @@ class YoutubeQuery:
                 result = self.search_youtube(q, order='relevance', token=response[0], times=counter)
 
         return result
+
+
+if __name__ == "__main__":
+    test = YoutubeQuery()
+    print(test.DEVELOPER_KEY)
+    print(test.search_youtube('despacito'))

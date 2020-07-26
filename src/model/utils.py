@@ -18,3 +18,8 @@ PREFIX_DIR = os.path.join(DATA_DIR, 'prefix.txt')
 WEATHER_DIR = os.path.join(DATA_DIR, 'weather')
 CITY_DIR = os.path.join(WEATHER_DIR, 'city.txt')
 TIMES_DIR = os.path.join(WEATHER_DIR, 'times.txt')
+
+# constants
+with open(PREFIX_DIR, 'r') as file:
+    PREFIX = file.read()
+    file.close()

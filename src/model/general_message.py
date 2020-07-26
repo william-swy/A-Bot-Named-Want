@@ -22,20 +22,6 @@ class GeneralMessage(commands.Cog):
         else:
             await ctx.send("Sorry didn't understand that")
 
-        """if len(args) == 2:
-            if args[1] == "you?" or args[1] == "you":
-                if args[0] == "are":
-                    await ctx.send("a sPIRITUAL lYRICAL mIRACLE iNDIVIDUAL")
-                    await ctx.send(file=File(utils.YES_PATH))
-                elif args[0] == "made":
-                    await ctx.send("Made by the magnificent Pectacius")
-                else:
-                    raise commands.CommandNotFound
-            else:
-                raise commands.CommandNotFound
-        else:
-            raise commands.CommandNotFound"""
-
     @commands.command()
     async def hi(self, ctx: commands.Context):
         author = ctx.author
@@ -48,8 +34,8 @@ class GeneralMessage(commands.Cog):
     @commands.command(name='help')
     async def help_me(self, ctx: commands.Context):
         command_dict = {
-            'who are you?': 'info on BOT_Pectacius',
-            'who made you?': 'maker of BOT_Pectacius',
+            'who are you?': f'info on {self.bot.user.name}',
+            'who made you?': f'maker of {self.bot.user.name}',
             'hi': "the bot is lonely, say hi;)",
             'roast <@member_name>': 'roasts <member_name> with a cheesy roast (accepts "me" as arg)',
             'join': 'makes bot join your current voice channel',
@@ -59,12 +45,14 @@ class GeneralMessage(commands.Cog):
             'pause': 'pauses current song',
             'queue <song name>': 'adds song to queue',
             'resume': 'resumes playing paused song',
+            'songs': 'view all songs in queue',
+            'clear': 'clears all songs in queue',
             'weather <city name>': 'displays current weather in <city name>',
             'flip_coin <num_of_coins>': 'flips a given number of coin(s) one time',
             'roll_dice <num_of_sides> <num_of_dice>': 'rolls given number of dice a given number of times'
         }
-        msg = Embed(title='BOT_Pectacius Commands',
-                    description='List of what BOT_Pectacius can do for you.\n Type "?" followed by command:)',
+        msg = Embed(title=f'{self.bot.user.name} Commands',
+                    description=f'Type "{utils.PREFIX}" followed by command',
                     color=0x0000ff)
         for ability, description in command_dict.items():
             msg.add_field(name=ability, value=description, inline=False)
