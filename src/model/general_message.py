@@ -17,7 +17,7 @@ class GeneralMessage(commands.Cog):
 
     @commands.command()
     async def about(self, ctx: commands.Context) -> None:
-        """sends a message on the who the bot is and the bot's maker"""
+        """Sends a message on the who the bot is and the bot's maker"""
         cool_image_path = os.path.join(utils.IMAGE_DIR, 'special.jpg')
         cool_image_file = File(fp=cool_image_path, filename='special.jpg')
 
@@ -42,36 +42,9 @@ class GeneralMessage(commands.Cog):
         else:
             await ctx.send(f'Greeting {author.name}, this does seem familiar...')
 
-    @commands.command(name='help')
-    async def help_me(self, ctx: commands.Context):
-        command_dict = {
-            'who are you?': f'info on {self.bot.user.name}',
-            'who made you?': f'maker of {self.bot.user.name}',
-            'hi': "the bot is lonely, say hi;)",
-            'roast <@member_name>': 'roasts <member_name> with a cheesy roast (accepts "me" as arg)',
-            'join': 'makes bot join your current voice channel',
-            'leave': 'makes bot leave your current voice channel',
-            'play <song name>': 'plays song in music voice channel, will queue song if another song is playing',
-            'skip': 'plays next song in music queue',
-            'pause': 'pauses current song',
-            'queue <song name>': 'adds song to queue',
-            'resume': 'resumes playing paused song',
-            'songs': 'view all songs in queue',
-            'clear': 'clears all songs in queue',
-            'weather <city name>': 'displays current weather in <city name>',
-            'flip_coin <num_of_coins>': 'flips a given number of coin(s) one time',
-            'roll_dice <num_of_sides> <num_of_dice>': 'rolls given number of dice a given number of times'
-        }
-        msg = Embed(title=f'{self.bot.user.name} Commands',
-                    description=f'Type "{utils.PREFIX}" followed by command',
-                    color=0x0000ff)
-        for ability, description in command_dict.items():
-            msg.add_field(name=ability, value=description, inline=False)
-        await ctx.send(embed=msg)
-
     @commands.command()
     async def roast(self, ctx: commands.Context, member: Member) -> None:
-        """pings selected member with a random roast"""
+        """Pings <member> with a random roast"""
         guild_members = self.bot.get_all_members()
 
         roasts = {'roblox': (('stop being having autism', "go commit breathn't", 'you were born out of your dad',
@@ -98,14 +71,14 @@ class GeneralMessage(commands.Cog):
 
     @commands.command()
     async def flip_coin(self, ctx: commands.Context, number: int) -> None:
-        """flips a coin <number> amount of times and sends result in chat"""
+        """Flips a coin <number> amount of times and sends result in chat"""
         for times in range(number):
             result = random.choice(['Heads', 'Tails'])
             await ctx.send(result)
 
     @commands.command()
     async def roll_dice(self, ctx: commands.Context, sides: int, number: int) -> None:
-        """rolls a <sides> side die <number> amount of times and sends result in chat"""
+        """Rolls a <sides> sided die <number> amount of times and sends result in chat"""
         for times in range(number):
             result = random.choice(range(1, sides + 1))
             await ctx.send(f'{result}')

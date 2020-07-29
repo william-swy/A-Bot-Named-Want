@@ -1,5 +1,6 @@
 from discord.ext import commands
 from custom_errors import *
+import utils
 
 
 class GeneralErrorHandler(commands.Cog):
@@ -11,7 +12,7 @@ class GeneralErrorHandler(commands.Cog):
     async def on_command_error(self, ctx: commands.Context, error) -> None:
         """catches exceptions and sends message relating to exception"""
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send('Sorry I did not catch that... type "?help" to see what I can do;) ')
+            await ctx.send(f'Sorry I did not catch that... type "{utils.PREFIX}help" to see what I can do;) ')
         elif isinstance(error, NoMemberError):
             await ctx.send('Error 404 Guild Member Not Found...')
         elif isinstance(error, TooManySongs):

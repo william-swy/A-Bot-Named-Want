@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     # initialize bot
     bot = commands.Bot(command_prefix=utils.PREFIX, description='A multipurpose bot', help_command=Help())
-    bot.remove_command("help")
+    #bot.remove_command("help")
 
     # add cogs
     bot.add_cog(member_manager.MemberManager(bot))

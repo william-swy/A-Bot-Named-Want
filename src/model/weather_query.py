@@ -18,7 +18,7 @@ class GetWeather(commands.Cog):
 
     @commands.command()
     async def weather(self, ctx: commands.Context, city: str) -> None:
-        """sends a weather report in chat of requested <city>"""
+        """Sends a weather report in chat of requested <city>"""
         weather_embed, image_file = await self.weather_report.get_weather_report(city)
         await ctx.send(embed=weather_embed, file=image_file)
 

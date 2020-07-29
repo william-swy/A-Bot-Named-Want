@@ -9,7 +9,7 @@ class LeaveJoin(commands.Cog):
 
     @commands.command()
     async def join(self, ctx: commands.Context) -> None:
-        """bot will join your current voice channel. If bot is in another channel, it will join your current channel"""
+        """Bot will join your current voice channel. If bot is in another channel, it will join your current channel"""
         channel = ctx.author.voice.channel
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
@@ -22,7 +22,7 @@ class LeaveJoin(commands.Cog):
 
     @commands.command()
     async def leave(self, ctx: commands.Context) -> None:
-        """bot will leave your current voice channel"""
+        """Bot will leave your current voice channel"""
         channel = ctx.author.voice.channel
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
