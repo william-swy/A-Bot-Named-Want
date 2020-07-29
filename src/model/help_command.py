@@ -1,8 +1,8 @@
 import os
 import random
 
-from discord.ext.commands import HelpCommand, Command
 from discord import Embed, File
+from discord.ext.commands import HelpCommand, Command
 
 from utils import PREFIX, IMAGE_DIR
 

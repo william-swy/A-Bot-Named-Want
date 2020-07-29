@@ -5,10 +5,10 @@ import shutil
 import re
 from typing import List, Tuple, Optional
 
-import youtube_dl
 from discord import FFmpegPCMAudio, PCMVolumeTransformer, Embed, File
 from discord.ext import commands
 from discord.utils import get
+import youtube_dl
 
 import custom_errors
 import utils

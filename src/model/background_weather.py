@@ -1,11 +1,11 @@
 import asyncio
-import os
 from datetime import datetime
+import os
 
 from discord.ext import commands
 
-import weather_query
 from utils import CITY_DIR, TIMES_DIR
+import weather_query
 
 
 class BackgroundWeather:

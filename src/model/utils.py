@@ -1,5 +1,5 @@
-from pathlib import Path
 import os
+from pathlib import Path
 
 # PATHS of various files
 ROOT_DIR = Path(__file__).parent.parent.parent

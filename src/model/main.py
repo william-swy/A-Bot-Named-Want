@@ -1,13 +1,13 @@
 import os
 
-from help_command import Help
 from discord.ext import commands
 from dotenv import load_dotenv
+from help_command import Help
 
 import background_weather
-import leave_join
 import general_error_handler
 import general_message
+import leave_join
 import member_manager
 import music
 import utils

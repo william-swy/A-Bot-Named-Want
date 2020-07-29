@@ -1,8 +1,8 @@
-import aiohttp
+from decimal import Decimal
 import os
 from typing import Tuple, List
-from decimal import Decimal
 
+import aiohttp
 from discord.ext import commands
 from discord import Embed, File
 
