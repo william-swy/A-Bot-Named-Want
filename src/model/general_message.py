@@ -1,27 +1,36 @@
 from discord.ext import commands
 from custom_errors import NoMemberError
-from discord import Embed, File
+from discord import Embed, File, Member
 import random
 import utils
+import os
 
 
 class GeneralMessage(commands.Cog):
+    SPIDER_PATH = os.path.join(utils.IMAGE_DIR, 'spider.jpg')
+    OOF_PATH = os.path.join(utils.IMAGE_DIR, 'oof.jpg')
+
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.previous_member = None
         self.member_name = None
 
     @commands.command()
-    async def who(self, ctx: commands.Context, *, args) -> None:
+    async def about(self, ctx: commands.Context) -> None:
         """sends a message on the who the bot is and the bot's maker"""
-        lower_args = args.lower()
-        if lower_args.find("are you") == 0:
-            await ctx.send("a sPIRITUAL lYRICAL mIRACLE iNDIVIDUAL")
-            await ctx.send(file=File(utils.YES_PATH))
-        elif lower_args.find("made you") == 0:
-            await ctx.send("Made by the magnificent Pectacius")
-        else:
-            await ctx.send("Sorry didn't understand that")
+        cool_image_path = os.path.join(utils.IMAGE_DIR, 'special.jpg')
+        cool_image_file = File(fp=cool_image_path, filename='special.jpg')
+
+        # create and format embed
+        about_embed = Embed(title="About",
+                            description=f"Info on {self.bot.user.name}",
+                            color=0xffa500)
+        about_embed.add_field(name=f"Who I Am:",
+                              value='I am A Spiritual Lyrical Miracle Individual',
+                              inline=False)
+        about_embed.add_field(name='Maker:', value="Made by Pectacius" + '\u1d48' + '\u1d49' + '\u1d5b')
+        about_embed.set_image(url="attachment://special.jpg")
+        await ctx.send(file=cool_image_file, embed=about_embed)
 
     @commands.command()
     async def hi(self, ctx: commands.Context) -> None:
@@ -61,41 +70,41 @@ class GeneralMessage(commands.Cog):
         await ctx.send(embed=msg)
 
     @commands.command()
-    async def roast(self, ctx: commands.Context, member) -> None:
-        """pings selected member with a roast"""
+    async def roast(self, ctx: commands.Context, member: Member) -> None:
+        """pings selected member with a random roast"""
         guild_members = self.bot.get_all_members()
-        member_obj = await commands.MemberConverter().convert(ctx, member)
 
-        roasts = {'roblox': ['stop being having autism', "go commit breathn't", 'you were born out of your dad',
-                             'you think you funny but look at ya hairline be looking like the macdondald symble',
-                             'do you are have stupid', 'yeetus yeetus commit self deletus'],
-                  'weirdness': ['ur a trophy{}\n a catas..trophy'.format('\n...' * 3),
-                                'ur pretty{}\n pretty ugly'.format('\n...' * 3)]}
+        roasts = {'roblox': (('stop being having autism', "go commit breathn't", 'you were born out of your dad',
+                              'you think you funny but look at ya hairline be looking like the macdondald symble',
+                              'do you are have stupid', 'yeetus yeetus commit self deletus'),
+                             self.SPIDER_PATH),
+                  'weirdness': (('ur a trophy{}\n a catas..trophy'.format('\n...' * 3),
+                                 'ur pretty{}\n pretty ugly'.format('\n...' * 3)),
+                                self.OOF_PATH)}
 
         roast = random.choice(list(roasts.items()))
-        the_roast = random.choice(roast[1])
+        roast_msg = random.choice(roast[1][0])
+        roast_img = roast[1][1]
 
-        if member_obj in guild_members:
-            self.member_name = member_obj.name
-
-            await ctx.send(f'{self.member_name}\n{the_roast}')
-
-            if roast[0] == 'roblox':
-                await ctx.send(file=File(utils.ROBLOX_PATH))
-            if roast[0] == 'weirdness':
-                await ctx.send(file=File(utils.WEIRD_PATH))
+        if member in guild_members:
+            # create embed message
+            roast_file = File(fp=roast_img, filename='roast_img.jpg')
+            roast_embed = Embed(title=self.bot.user.name + " says:", description=roast_msg)
+            roast_embed.set_image(url='attachment://roast_img.jpg')
+            await ctx.send(f'@{member.name}')
+            await ctx.send(file=roast_file, embed=roast_embed)
         else:
             raise NoMemberError
 
     @commands.command()
-    async def flip_coin(self, ctx: commands.Context, number: int):
+    async def flip_coin(self, ctx: commands.Context, number: int) -> None:
         """flips a coin <number> amount of times and sends result in chat"""
         for times in range(number):
             result = random.choice(['Heads', 'Tails'])
             await ctx.send(result)
 
     @commands.command()
-    async def roll_dice(self, ctx: commands.Context, sides: int, number: int):
+    async def roll_dice(self, ctx: commands.Context, sides: int, number: int) -> None:
         """rolls a <sides> side die <number> amount of times and sends result in chat"""
         for times in range(number):
             result = random.choice(range(1, sides + 1))

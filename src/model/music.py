@@ -24,7 +24,7 @@ class Music(commands.Cog):
     CACHED_MUSIC_DIR = os.path.join(CACHED_DIR, 'music')
     CACHED_SONG_QUOTA = 50
 
-    MELODY_IMG = os.path.join(utils.DATA_DIR, 'melody.jpg')
+    MELODY_IMG = os.path.join(utils.IMAGE_DIR, 'melody.jpg')
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot

@@ -13,10 +13,11 @@ class YoutubeQuery:
     YOUTUBE_URL = 'https://www.youtube.com/watch?v='
 
     def __init__(self) -> None:
+        """grabs google api key from environment variables"""
         load_dotenv(utils.ENV_PATH)
         self.DEVELOPER_KEY = os.getenv('YOUTUBE_TOKEN')
 
-    def search_youtube(self, q, order='relevance', token=None, times=SEARCH_TIMES) -> str:
+    def search_youtube(self, q: str, order='relevance', token=None, times=SEARCH_TIMES) -> str:
         """returns the url of the youtube search keyword based on relevance"""
         counter = times
         youtube = build(self.YOUTUBE_API_SERVICE_NAME, self.YOUTUBE_API_VERSION, developerKey=self.DEVELOPER_KEY)
@@ -36,7 +37,7 @@ class YoutubeQuery:
         url = self.find_url(q, search_response, counter)
         return url
 
-    def find_url(self, q, response, counter) -> str:
+    def find_url(self, q: str, response: dict, counter: int) -> str:
         """searches next page if first page cannot find a video"""
         result = None
         for search_result in response.get('items', []):

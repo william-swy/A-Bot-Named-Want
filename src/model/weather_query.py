@@ -1,5 +1,6 @@
 import aiohttp
 import os
+from typing import Tuple, List
 from discord.ext import commands
 from discord import Embed
 import custom_errors
@@ -8,13 +9,14 @@ from decimal import Decimal
 
 class GetWeather(commands.Cog):
     """adds command to allow to get current weather of a city"""
-    def __init__(self, bot: commands.Bot):
+
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.weather_report = Weather()
 
     @commands.command()
-    async def weather(self, ctx: commands.Context, city):
-        """sends a weather report in chat of requested city"""
+    async def weather(self, ctx: commands.Context, city: str) -> None:
+        """sends a weather report in chat of requested <city>"""
         embed = await self.weather_report.get_weather_report(city)
         await ctx.send(embed=embed)
 
@@ -25,10 +27,10 @@ class Weather:
     BASE_WEATHER_EMOJI_URL = r'http://openweathermap.org/img/wn/{emoji}@2x.png'
     KELVIN_CELSIUS_DIFF = -273.15
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.WEATHER_KEY = os.getenv('WEATHER_TOKEN')
 
-    async def basic_search(self, city):
+    async def basic_search(self, city: str):
         """makes api request and returns temperature, feels like temp, pressure, humidity and description"""
         complete_url = self.BASE_DAILY_WEATHER_URL.format(city_name=city, key=self.WEATHER_KEY)
         async with aiohttp.ClientSession() as session:
@@ -55,7 +57,7 @@ class Weather:
                 else:
                     raise custom_errors.NoCityFound()
 
-    async def get_weather_report(self, city):
+    async def get_weather_report(self, city: str) -> Embed:
         """"create a embed with the weather data"""
         weather_data, icon = await self.basic_search(city)
         icon_url = self.grab_icon(icon)
@@ -67,10 +69,10 @@ class Weather:
         embed.set_image(url=icon_url)
         return embed
 
-    def grab_icon(self, icon):
+    def grab_icon(self, icon: str) -> str:
         """returns url of png corresponding to the inputted icon encoding"""
         return self.BASE_WEATHER_EMOJI_URL.format(emoji=icon)
 
-    def kelvin_to_celsius(self, temp):
+    def kelvin_to_celsius(self, temp: str) -> str:
         """converts a kelvin Decimal to a celsius string to 2 decimal places"""
         return str(round(Decimal(temp) + Decimal(self.KELVIN_CELSIUS_DIFF), 2))
