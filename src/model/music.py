@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 import re
-import typing
+from typing import List, Tuple, Optional
 
 import youtube_dl
 from discord import FFmpegPCMAudio, PCMVolumeTransformer, Embed, File
@@ -24,7 +24,7 @@ class Music(commands.Cog):
     CACHED_MUSIC_DIR = os.path.join(CACHED_DIR, 'music')
     CACHED_SONG_QUOTA = 50
 
-    MELODY_IMG = os.path.join(utils.DATA_DIR, 'melody.jpg')
+    MELODY_IMG = os.path.join(utils.IMAGE_DIR, 'melody.jpg')
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -36,34 +36,35 @@ class Music(commands.Cog):
         self.is_waiting = asyncio.Event()
 
     @commands.command()
-    async def play(self, ctx: commands.Context, *, args: typing.Optional[str] = '') -> None:
-        """plays song in voice client"""
+    async def play(self, ctx: commands.Context, *, song: Optional[str] = '') -> None:
+        """Plays <song> in voice client"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         # check if command can be called
-        if len(args) == 0 and len(self.queues) == 0:
+        if len(song) == 0 and len(self.queues) == 0:
             await ctx.send('No song to play')
             return
-        elif len(args) == 0 and voice.is_playing():
+        elif len(song) == 0 and voice.is_playing():
             await ctx.send("A song is already playing")
             return
-        elif len(args) == 0 and voice.is_paused():
+        elif len(song) == 0 and voice.is_paused():
             await ctx.send(f'There is currently a song paused, type `{utils.PREFIX}resume` '
                            f'to resume or `{utils.PREFIX}skip` to skip')
             return
-        elif len(args) != 0:
-            await self.get_url(args)
+        elif len(song) != 0:
+            await self.get_url(song)
 
             # see if the song is cached
             is_cached = await self.is_song_cached()
 
-            await ctx.send('Getting everything ready now')
+            await ctx.send('Finding ' + song)
 
             if not is_cached:
                 await self.download_music()
                 await self.check_cache_size()
                 await self.move_to_cache()
 
+            await ctx.send(f'Hippity hoppity {song} is now my property')
             if len(self.queues) != 0:
                 await ctx.send(f'There are currently {len(self.queues)} songs queued, '
                                f'your song has been added to the queue')
@@ -215,7 +216,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def pause(self, ctx: commands.Context) -> None:
-        """pauses current playing song"""
+        """Pauses current playing song"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         if voice and voice.is_playing():
@@ -228,7 +229,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def resume(self, ctx: commands.Context) -> None:
-        """resumes current paused song"""
+        """Resumes current paused song"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         if voice and voice.is_paused():
@@ -241,7 +242,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def skip(self, ctx: commands.Context) -> None:
-        """skips to next song in queue"""
+        """Skips to next song in queue"""
         voice = get(self.bot.voice_clients, guild=ctx.guild)
 
         if voice and voice.is_playing():
@@ -259,13 +260,13 @@ class Music(commands.Cog):
             await ctx.send('No music playing, failed to skip')
 
     @commands.command()
-    async def queue(self, ctx: commands.Context, *args) -> None:
-        """add a song to the queue"""
-        if len(args) == 0:
+    async def queue(self, ctx: commands.Context, *, song: str) -> None:
+        """Add <song> to the queue"""
+        if len(song) == 0:
             await ctx.send('Give me a song to play')
             return
 
-        await self.get_url(args)
+        await self.get_url(song)
 
         # see if the song is cached
         is_cached = await self.is_song_cached()
@@ -277,18 +278,18 @@ class Music(commands.Cog):
 
         self.queues.append(self.name)
 
-        await ctx.send('Song added to queue')
+        await ctx.send(f'Hippity hoppity {song} is now my property')
 
     @commands.command()
     async def clear(self, ctx: commands.Context) -> None:
-        """removes all songs from queue"""
+        """Removes all songs from queue"""
         self.queues = []
         await ctx.send("Queues cleared!")
 
-    def song_embed(self) -> tuple:
+    def song_embed(self) -> Tuple[Embed, File]:
         """returns an embed of the songs currently in queue"""
 
-        def get_song_name(name) -> list:
+        def get_song_name(name) -> List[str, str]:
             bracket_regex = r'\(.*\)'
             parenth_regex = r'\[.*\]'
             ft_regex = r'ft.*'
@@ -322,7 +323,7 @@ class Music(commands.Cog):
 
     @commands.command()
     async def songs(self, ctx: commands.Context) -> None:
-        """shows all songs in queue"""
+        """Shows all songs in queue"""
         file = self.song_embed()[1]
         embed = self.song_embed()[0]
         await ctx.send(file=file, embed=embed)

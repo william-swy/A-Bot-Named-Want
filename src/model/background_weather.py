@@ -14,6 +14,8 @@ class BackgroundWeather:
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.weather = weather_query.Weather()
+        self.bot.loop.run_until_complete(self.initialize_settings())
+        self.bot.loop.create_task(self.meteorology_report())
 
     async def meteorology_report(self) -> None:
         """sends a weather report at when current time matches designated time"""
@@ -21,19 +23,16 @@ class BackgroundWeather:
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
             now = datetime.strftime(datetime.now(), time_format)
-            if now == self.TIMES[0]:
+            if now in self.TIMES:
                 channel = self.bot.get_channel(int(os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')))
                 await channel.send(f'This is your {self.TIMES[0]} weather report')
 
                 # send reports for all cities
                 for city in self.CURRENT_CITY:
-                    embed = await self.weather.get_weather_report(city)
-                    await channel.send(embed=embed)
+                    weather_embed, weather_img = await self.weather.get_weather_report(city)
+                    await channel.send(embed=weather_embed, file=weather_img)
 
-                first_time = self.TIMES[0]
-                self.TIMES.pop(0)
-                self.TIMES.append(first_time)
-                delay_time = 90
+                delay_time = 60
             else:
                 delay_time = 1
             await asyncio.sleep(delay_time)

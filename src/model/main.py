@@ -8,18 +8,20 @@ import member_manager
 import music
 import utils
 import weather_query
+from help_command import Help
 from discord.ext import commands
 from dotenv import load_dotenv
 
 if __name__ == "__main__":
+    # load keys in environment variables
     load_dotenv(utils.ENV_PATH)
 
     TOKEN = os.getenv('DISCORD_TOKEN')
     GENERAL_CHANNEL_ID = os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')
 
     # initialize bot
-    bot = commands.Bot(command_prefix=utils.PREFIX, description='A multipurpose bot')
-    bot.remove_command("help")
+    bot = commands.Bot(command_prefix=utils.PREFIX, description='A multipurpose bot', help_command=Help())
+    #bot.remove_command("help")
 
     # add cogs
     bot.add_cog(member_manager.MemberManager(bot))
@@ -42,8 +44,6 @@ if __name__ == "__main__":
 
     # initialize the scheduled weather reports
     weather_man = background_weather.BackgroundWeather(bot)
-    bot.loop.run_until_complete(weather_man.initialize_settings())
-    bot.loop.create_task(weather_man.meteorology_report())
 
     # run bot
     bot.run(TOKEN)

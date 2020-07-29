@@ -4,6 +4,7 @@ import requests
 import os
 from model import utils
 
+
 # sets cities and times for weather report
 
 
@@ -16,7 +17,7 @@ def valid_time(time_input) -> bool:
 
 
 # return true if city_input is valid city name, else return false
-def valid_city(city_input)-> bool:
+def valid_city(city_input) -> bool:
     key = os.getenv('WEATHER_TOKEN')
     url = r'http://api.openweathermap.org/data/2.5/weather?q=' + city_input + '&appid=' + key
     response = requests.get(url)
