@@ -91,7 +91,7 @@ class GeneralMessage(commands.Cog):
             roast_file = File(fp=roast_img, filename='roast_img.jpg')
             roast_embed = Embed(title=self.bot.user.name + " says:", description=roast_msg)
             roast_embed.set_image(url='attachment://roast_img.jpg')
-            await ctx.send(f'@{member.name}')
+            await ctx.send(member.mention)
             await ctx.send(file=roast_file, embed=roast_embed)
         else:
             raise NoMemberError
