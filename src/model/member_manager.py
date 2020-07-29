@@ -1,7 +1,9 @@
 import os
-import utils
+
 from discord import File
 from discord.ext import commands
+
+import utils
 
 
 class MemberManager(commands.Cog):

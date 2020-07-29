@@ -1,14 +1,16 @@
 import aiohttp
 import os
 from typing import Tuple, List
-from discord.ext import commands
-from discord import Embed, File
-import custom_errors
-import utils
 from decimal import Decimal
 
+from discord.ext import commands
+from discord import Embed, File
 
-class GetWeather(commands.Cog):
+import custom_errors
+import utils
+
+
+class WeatherCog(commands.Cog):
     """adds command to allow to get current weather of a city"""
 
     def __init__(self, bot: commands.Bot) -> None:

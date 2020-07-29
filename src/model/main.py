@@ -1,5 +1,9 @@
 import os
 
+from help_command import Help
+from discord.ext import commands
+from dotenv import load_dotenv
+
 import background_weather
 import leave_join
 import general_error_handler
@@ -8,9 +12,6 @@ import member_manager
 import music
 import utils
 import weather_query
-from help_command import Help
-from discord.ext import commands
-from dotenv import load_dotenv
 
 if __name__ == "__main__":
     # load keys in environment variables
@@ -21,7 +22,6 @@ if __name__ == "__main__":
 
     # initialize bot
     bot = commands.Bot(command_prefix=utils.PREFIX, description='A multipurpose bot', help_command=Help())
-    #bot.remove_command("help")
 
     # add cogs
     bot.add_cog(member_manager.MemberManager(bot))
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     bot.add_cog(general_error_handler.GeneralErrorHandler(bot))
     bot.add_cog(leave_join.LeaveJoin(bot))
     bot.add_cog(music.Music(bot))
-    bot.add_cog(weather_query.GetWeather(bot))
+    bot.add_cog(weather_query.WeatherCog(bot))
 
     # connection confirmation
     @bot.event

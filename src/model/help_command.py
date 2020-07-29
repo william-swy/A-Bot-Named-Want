@@ -1,8 +1,10 @@
-from discord.ext.commands import HelpCommand, Command
-from discord import Embed, File
-from utils import PREFIX, IMAGE_DIR
 import os
 import random
+
+from discord.ext.commands import HelpCommand, Command
+from discord import Embed, File
+
+from utils import PREFIX, IMAGE_DIR
 
 
 class Help(HelpCommand):
