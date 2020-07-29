@@ -44,8 +44,6 @@ if __name__ == "__main__":
 
     # initialize the scheduled weather reports
     weather_man = background_weather.BackgroundWeather(bot)
-    bot.loop.run_until_complete(weather_man.initialize_settings())
-    bot.loop.create_task(weather_man.meteorology_report())
 
     # run bot
     bot.run(TOKEN)
