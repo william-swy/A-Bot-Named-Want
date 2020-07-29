@@ -6,7 +6,7 @@ from discord.ext import commands
 import utils
 
 
-class MemberManager(commands.Cog):
+class MemberManagerCog(commands.Cog):
     """handles member join and leave"""
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -30,3 +30,8 @@ class MemberManager(commands.Cog):
         else:
             await member.dm_channel.send("Welcome Back! YAY! YAY!")
             await general_channel.send(f'{member.name} IS BACK.. WITH SOME SNACKS!')
+
+
+def setup(bot: commands.Bot) -> None:
+    """Loads MemberManagerCog"""
+    bot.add_cog(MemberManagerCog(bot))

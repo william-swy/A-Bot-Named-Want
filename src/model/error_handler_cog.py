@@ -4,7 +4,7 @@ import custom_errors
 import utils
 
 
-class GeneralErrorHandler(commands.Cog):
+class ErrorHandlerCog(commands.Cog):
     """sends message on about on not able to execute a command"""
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -20,3 +20,8 @@ class GeneralErrorHandler(commands.Cog):
             await ctx.send("Sorry there are too many songs queued, can't get your song, try again later, sorry")
         elif isinstance(error, custom_errors.NoCityFound):
             await ctx.send("Can't find your specified city, double check your city name perhaps?")
+
+
+def setup(bot: commands.Bot) -> None:
+    """Loads ErrorHandlerCog"""
+    bot.add_cog(ErrorHandlerCog(bot))

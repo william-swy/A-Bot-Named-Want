@@ -8,7 +8,7 @@ from custom_errors import NoMemberError
 import utils
 
 
-class GeneralMessage(commands.Cog):
+class GeneralMessageCog(commands.Cog):
     SPIDER_PATH = os.path.join(utils.IMAGE_DIR, 'spider.jpg')
     OOF_PATH = os.path.join(utils.IMAGE_DIR, 'oof.jpg')
 
@@ -84,3 +84,8 @@ class GeneralMessage(commands.Cog):
         for times in range(number):
             result = random.choice(range(1, sides + 1))
             await ctx.send(f'{result}')
+
+
+def setup(bot: commands.Bot) -> None:
+    """Loads GeneralMessageCog"""
+    bot.add_cog(GeneralMessageCog(bot))

@@ -15,7 +15,7 @@ import utils
 import youtube_query
 
 
-class Music(commands.Cog):
+class MusicCog(commands.Cog):
     """Plays music based on mp3"""
     YOUTUBE_URL_BASE = 'https://www.youtube.com/watch?v='
     DATA_DIR = utils.DATA_DIR
@@ -327,3 +327,8 @@ class Music(commands.Cog):
         file = self.song_embed()[1]
         embed = self.song_embed()[0]
         await ctx.send(file=file, embed=embed)
+
+
+def setup(bot: commands.Bot) -> None:
+    """Loads MusicCog"""
+    bot.add_cog(MusicCog(bot))

@@ -5,13 +5,7 @@ from dotenv import load_dotenv
 from help_command import Help
 
 import background_weather
-import general_error_handler
-import general_message
-import leave_join
-import member_manager
-import music
 import utils
-import weather_query
 
 if __name__ == "__main__":
     # load keys in environment variables
@@ -24,12 +18,10 @@ if __name__ == "__main__":
     bot = commands.Bot(command_prefix=utils.PREFIX, description='A multipurpose bot', help_command=Help())
 
     # add cogs
-    bot.add_cog(member_manager.MemberManager(bot))
-    bot.add_cog(general_message.GeneralMessage(bot))
-    bot.add_cog(general_error_handler.GeneralErrorHandler(bot))
-    bot.add_cog(leave_join.LeaveJoin(bot))
-    bot.add_cog(music.Music(bot))
-    bot.add_cog(weather_query.WeatherCog(bot))
+    cog_files_list = [f for f in os.listdir(utils.MAIN_DIR) if 'cog' in f]
+    cog_extensions = map(lambda x: x[:-3], cog_files_list)
+    for cog in cog_extensions:
+        bot.load_extension(cog)
 
     # connection confirmation
     @bot.event
