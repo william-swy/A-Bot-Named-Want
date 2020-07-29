@@ -2,7 +2,9 @@
 *.log
 *.mp3
 cached_music_dict.json
-*.txt
+prefix.txt
+city.txt
+times.txt
 *.jpg
 *.png
 *.gif
