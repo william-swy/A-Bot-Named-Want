@@ -27,4 +27,4 @@ Made with Discord.py
 ### **Configure Timed Weather Reports**
 1. Run `src\config_weather.py`
 2. Input city names, `<city name>`. Add `<state code, ISO 3166 country code>` to input if need to specify
-3. Input local times as in 24 hour format(ie. `02:00` for 2:00 am and `14:00` for 2:00 pm)
+3. Input UTC times as in 24 hour format(ie. `02:00` for 2:00 am and `14:00` for 2:00 pm)

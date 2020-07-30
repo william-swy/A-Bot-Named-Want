@@ -24,10 +24,10 @@ class BackgroundWeather:
         time_format = '%H:%M'
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
-            now = datetime.strftime(datetime.now(), time_format)
+            now = datetime.strftime(datetime.utcnow(), time_format)
             if now in self.TIMES:
                 channel = self.bot.get_channel(int(os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')))
-                await channel.send(f'This is your {self.TIMES[0]} weather report')
+                await channel.send(f'This is your {now} UTC weather report')
 
                 # send reports for all cities
                 for city in self.CURRENT_CITY:
