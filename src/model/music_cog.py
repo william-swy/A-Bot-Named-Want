@@ -286,34 +286,34 @@ class MusicCog(commands.Cog):
         self.queues = []
         await ctx.send("Queues cleared!")
 
+    @staticmethod
+    def get_song_name(name) -> Tuple[str, str]:
+        bracket_regex = r'\(.*\)'
+        parenth_regex = r'\[.*\]'
+        ft_regex = r'ft.*'
+        removed_code = name.split('-')[:2]
+        author = removed_code[0]
+        first_clean = re.sub(bracket_regex, "", removed_code[1])
+        second_clean = re.sub(parenth_regex, "", first_clean)
+        final_name = re.sub(ft_regex, '', second_clean)
+        ft = re.findall(ft_regex, first_clean)
+        if ft:
+            ft = ft[0]
+        else:
+            ft = ''
+        final_author = (author + ft).strip(" ")
+        return final_name, final_author
+
     def song_embed(self) -> Tuple[Embed, File]:
         """returns an embed of the songs currently in queue"""
-
-        def get_song_name(name) -> List[str, str]:
-            bracket_regex = r'\(.*\)'
-            parenth_regex = r'\[.*\]'
-            ft_regex = r'ft.*'
-            removed_code = name.split('-')[:2]
-            author = removed_code[0]
-            first_clean = re.sub(bracket_regex, "", removed_code[1])
-            second_clean = re.sub(parenth_regex, "", first_clean)
-            final_name = re.sub(ft_regex, '', second_clean)
-            ft = re.findall(ft_regex, first_clean)
-            if ft:
-                ft = ft[0]
-            else:
-                ft = ''
-            final_author = (author + ft).strip(" ")
-            return [final_name, final_author]
-
         image = File(fp=self.MELODY_IMG, filename='melody.jpg')
-        msg = Embed(title='Songs', description="Melody has found the following songs", color=0xFFB6C1)
+        msg = Embed(title='Songs', description="Melody has found the following songs:", color=0xFFB6C1)
         msg.set_thumbnail(url='attachment://melody.jpg')
         if len(self.queues) == 0:
             msg.add_field(name='NONE', value='Give me a song to play', inline=False)
         else:
             for song in enumerate(self.queues):
-                song_details = get_song_name(song[1])
+                song_details = MusicCog.get_song_name(song[1])
                 if song[0] == 0:
                     message = "(Current)"
                 else:
@@ -324,8 +324,7 @@ class MusicCog(commands.Cog):
     @commands.command()
     async def songs(self, ctx: commands.Context) -> None:
         """Shows all songs in queue"""
-        file = self.song_embed()[1]
-        embed = self.song_embed()[0]
+        embed, file = self.song_embed()
         await ctx.send(file=file, embed=embed)
 
 
