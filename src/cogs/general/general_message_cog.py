@@ -4,7 +4,7 @@ import os
 from discord.ext import commands
 from discord import Embed, File, Member
 
-from custom_errors import NoMemberError
+from src.common.Errors.custom_errors import NoMemberError
 import utils
 
 

@@ -5,7 +5,7 @@ import os
 from discord.ext import commands
 
 from utils import CITY_DIR, TIMES_DIR
-import weather_query
+from src.cogs.weather import weather_query
 
 
 class BackgroundWeather:

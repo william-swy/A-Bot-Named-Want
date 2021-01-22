@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-import weather_query
+from src.cogs.weather import weather_query
 
 
 class WeatherCog(commands.Cog):

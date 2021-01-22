@@ -3,16 +3,16 @@ import json
 import os
 import shutil
 import re
-from typing import List, Tuple, Optional
+from typing import Tuple, Optional
 
 from discord import FFmpegPCMAudio, PCMVolumeTransformer, Embed, File
 from discord.ext import commands
 from discord.utils import get
 import youtube_dl
 
-import custom_errors
+from src.common.Errors import custom_errors
 import utils
-import youtube_query
+from src.cogs.music import youtube_query
 
 
 class MusicCog(commands.Cog):

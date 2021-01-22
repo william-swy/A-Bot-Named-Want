@@ -3,8 +3,6 @@ import os
 from discord import File
 from discord.ext import commands
 
-import utils
-
 
 class MemberManagerCog(commands.Cog):
     """handles member join and leave"""

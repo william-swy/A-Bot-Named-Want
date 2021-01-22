@@ -2,9 +2,9 @@ import os
 
 from discord.ext import commands
 from dotenv import load_dotenv
-from help_command import Help
+from src.cogs.general.help_command import Help
 
-import background_weather
+from src.cogs.weather import background_weather
 import utils
 
 if __name__ == "__main__":

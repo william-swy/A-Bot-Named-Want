@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).parent.parent.parent
 
 DATA_DIR = os.path.join(ROOT_DIR, 'data')
-ENV_PATH = os.path.join(DATA_DIR, '.env')
+ENV_PATH = os.path.join(DATA_DIR, 'bot.env')
 PREFIX_DIR = os.path.join(DATA_DIR, 'prefix.txt')
 
 SRC_DIR = os.path.join(ROOT_DIR, 'src')

@@ -5,7 +5,7 @@ from typing import Tuple, List
 import aiohttp
 from discord import Embed, File
 
-import custom_errors
+from src.common.Errors import custom_errors
 import utils
 
 
