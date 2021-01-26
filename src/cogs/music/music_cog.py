@@ -10,9 +10,10 @@ from discord.ext import commands
 from discord.utils import get
 import youtube_dl
 
-from src.common.Errors import custom_errors
-import utils
-from src.cogs.music import youtube_query
+from common.Errors import botexceptions
+from common.resources import MUSIC_IMG_PATH
+from config.config import BOT_PREFIX
+from cogs.music import youtube_query
 
 
 class MusicCog(commands.Cog):
@@ -23,8 +24,6 @@ class MusicCog(commands.Cog):
     MUSIC_DICT_DIR = os.path.join(CACHED_DIR, 'cached_music_dict.json')
     CACHED_MUSIC_DIR = os.path.join(CACHED_DIR, 'music')
     CACHED_SONG_QUOTA = 50
-
-    MELODY_IMG = os.path.join(utils.IMAGE_DIR, 'melody.jpg')
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -48,8 +47,8 @@ class MusicCog(commands.Cog):
             await ctx.send("A song is already playing")
             return
         elif len(song) == 0 and voice.is_paused():
-            await ctx.send(f'There is currently a song paused, type `{utils.PREFIX}resume` '
-                           f'to resume or `{utils.PREFIX}skip` to skip')
+            await ctx.send(f'There is currently a song paused, type `{BOT_PREFIX}resume` '
+                           f'to resume or `{BOT_PREFIX}skip` to skip')
             return
         elif len(song) != 0:
             await self.get_url(song)
@@ -130,13 +129,13 @@ class MusicCog(commands.Cog):
             # prevent a currently queued song from being deleted
             for song in self.queues:
                 if song in oldest_file:
-                    raise custom_errors.TooManySongs()
+                    raise botexceptions.TooManySongs()
 
             os.remove(oldest_file)
             await self.delete_song_data(oldest_file)
 
     async def delete_song_data(self, file_name) -> None:
-        """removes the specified song data from cached_music_dict.json"""
+        """removes the specified song resources from cached_music_dict.json"""
         json_file_read = open(self.MUSIC_DICT_DIR, 'r')
         data = json.load(json_file_read)
         json_file_read.close()
@@ -162,11 +161,11 @@ class MusicCog(commands.Cog):
                 break
         shutil.move(self.name, self.CACHED_MUSIC_DIR)
 
-        # update song data
+        # update song resources
         await self.add_song_data(file=self.name, url=self.url)
 
     async def add_song_data(self, file, url) -> None:
-        """adds song data to file"""
+        """adds song resources to file"""
         # check if there is a file, if not create one
         if not os.path.isfile(self.MUSIC_DICT_DIR):
             cached_music_file = open(self.MUSIC_DICT_DIR, 'w')
@@ -306,7 +305,7 @@ class MusicCog(commands.Cog):
 
     def song_embed(self) -> Tuple[Embed, File]:
         """returns an embed of the songs currently in queue"""
-        image = File(fp=self.MELODY_IMG, filename='melody.jpg')
+        image = File(fp=MUSIC_IMG_PATH, filename='melody.jpg')
         msg = Embed(title='Songs', description="Melody has found the following songs:", color=0xFFB6C1)
         msg.set_thumbnail(url='attachment://melody.jpg')
         if len(self.queues) == 0:

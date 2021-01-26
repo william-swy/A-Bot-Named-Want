@@ -1,11 +1,13 @@
 import asyncio
 from datetime import datetime
-import os
+import json
 
 from discord.ext import commands
 
-from utils import CITY_DIR, TIMES_DIR
-from src.cogs.weather import weather_query
+from cogs.weather import weatherservice
+from config.config import WEATHER_CHANNEL
+from common.Errors.botexceptions import NoCityFound
+from common.resources import WEATHER_SETTINGS_PATH
 
 
 class BackgroundWeather:
@@ -15,7 +17,7 @@ class BackgroundWeather:
 
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-        self.weather = weather_query.Weather()
+        self.weather = weatherservice.WeatherService()
         self.bot.loop.run_until_complete(self.initialize_settings())
         self.bot.loop.create_task(self.meteorology_report())
 
@@ -26,13 +28,16 @@ class BackgroundWeather:
         while not self.bot.is_closed():
             now = datetime.strftime(datetime.utcnow(), time_format)
             if now in self.TIMES:
-                channel = self.bot.get_channel(int(os.getenv('DISCORD_GENERAL_TALK_CHANNEL_ID')))
+                channel = self.bot.get_channel(int(WEATHER_CHANNEL))
                 await channel.send(f'This is your {now} UTC weather report')
 
                 # send reports for all cities
                 for city in self.CURRENT_CITY:
-                    weather_embed, weather_img = await self.weather.get_weather_report(city)
-                    await channel.send(embed=weather_embed, file=weather_img)
+                    try:
+                        weather_embed, weather_img = await self.weather.get_weather_report(city)
+                        await channel.send(embed=weather_embed, file=weather_img)
+                    except NoCityFound as error:
+                        pass
 
                 delay_time = 60
             else:
@@ -41,10 +46,7 @@ class BackgroundWeather:
 
     async def initialize_settings(self) -> None:
         """reads and parses city.txt and times.txt to set designated cities and times"""
-        with open(CITY_DIR, 'r') as city, open(TIMES_DIR) as times:
-            self.CURRENT_CITY = city.read().split("/")
-            self.TIMES = times.read().split(",")
-
-            # remove delimiters
-            del self.CURRENT_CITY[0]
-            del self.TIMES[0]
+        with open(WEATHER_SETTINGS_PATH, 'r') as settings:
+            data = json.load(settings)
+            self.CURRENT_CITY = data["cities"]
+            self.TIMES = data["times"]

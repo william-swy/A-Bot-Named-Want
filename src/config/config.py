@@ -1,8 +1,12 @@
-from config.bot import bot_startup
+from config.bot import startup
+from config.api import open_weather
 
-# Values obtained from environment variables
-TOKEN = bot_startup.TOKEN
-BOT_PREFIX = bot_startup.BOT_PREFIX
-ARRIVAL_CHANNEL = bot_startup.ARRIVAL_CHANNEL
-MUSIC_CHANNEL = bot_startup.MUSIC_CHANNEL
-WEATHER_CHANNEL = bot_startup.WEATHER_CHANNEL
+# Bot related environment variable values
+TOKEN = startup.TOKEN
+BOT_PREFIX = startup.BOT_PREFIX
+ARRIVAL_CHANNEL = startup.ARRIVAL_CHANNEL
+MUSIC_CHANNEL = startup.MUSIC_CHANNEL
+WEATHER_CHANNEL = startup.WEATHER_CHANNEL
+
+# API related environment variable values
+WEATHER_KEY = open_weather.WEATHER_KEY

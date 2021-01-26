@@ -4,13 +4,13 @@ import random
 from discord import Embed, File
 from discord.ext.commands import HelpCommand, Command
 
-from utils import PREFIX, IMAGE_DIR
+from common.resources import HELP_IMG_PATH
+from config.config import BOT_PREFIX
 
 
 class Help(HelpCommand):
     """custom help command"""
-    KERMIT_PATH = os.path.join(IMAGE_DIR, 'kermit.jpg')
-    IMG_FILE = File(fp=KERMIT_PATH, filename='kermit.jpg')
+    IMG_FILE = File(fp=HELP_IMG_PATH, filename='kermit.jpg')
 
     def __int__(self) -> None:
         """override the help description"""
@@ -25,7 +25,7 @@ class Help(HelpCommand):
                            description='For the ones that have forgotten or need a reminder...',
                            color=color)
 
-        help_embed.add_field(name='Invocation Prefix:', value=f"Invoke commands with a `{PREFIX}`", inline=False)
+        help_embed.add_field(name='Invocation Prefix:', value=f"Invoke commands with a `{BOT_PREFIX}`", inline=False)
 
         # remove key with value None
         mapping.pop(None)
@@ -39,7 +39,7 @@ class Help(HelpCommand):
                 help_embed.add_field(name=f"`{command.name}`", value=command.help, inline=False)
 
         help_embed.add_field(name="Want more info about a specific command?",
-                             value=f'Type `{PREFIX}<command_name>` for specific information!')
+                             value=f'Type `{BOT_PREFIX}<command_name>` for specific information!')
         help_embed.set_thumbnail(url="attachment://kermit.jpg")
 
         await super().get_destination().send(file=self.IMG_FILE, embed=help_embed)
@@ -48,7 +48,7 @@ class Help(HelpCommand):
         """Sends an embed of details of <command>"""
         color = random.randint(0, 16777215)
 
-        help_embed = Embed(title=f'Infomation for `{command.name}`', color=color)
+        help_embed = Embed(title=f'Information for `{command.name}`', color=color)
         help_embed.add_field(name='Description', value=command.help, inline=False)
         help_embed.set_thumbnail(url='attachment://kermit.jpg')
 

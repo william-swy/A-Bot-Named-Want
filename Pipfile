@@ -12,6 +12,7 @@ aiohttp = "*"
 pynacl = "*"
 ffmpeg-python = "*"
 youtube-dl = "*"
+youtube-search-python = "*"
 
 [requires]
 python_version = "3.9"

@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from config.config_paths import BOT_ENV_DIR
+from config.paths import BOT_ENV_DIR
 
 load_dotenv(BOT_ENV_DIR)
 

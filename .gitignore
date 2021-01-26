@@ -1,10 +1,6 @@
-*.env
+api.env
+bot.env
+database.env
 *.log
 *.mp3
 cached_music_dict.json
-prefix.txt
-city.txt
-times.txt
-*.jpg
-*.png
-*.gif

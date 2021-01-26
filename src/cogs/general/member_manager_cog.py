@@ -3,6 +3,8 @@ import os
 from discord import File
 from discord.ext import commands
 
+from common.resources import WELCOME_GIF_PATH
+
 
 class MemberManagerCog(commands.Cog):
     """handles member join and leave"""
@@ -24,7 +26,7 @@ class MemberManagerCog(commands.Cog):
                 I hAvE bEEn WAiTinG fOR yOU...( ͡° ͜ʖ ͡°) HEHE"""
             )
             await general_channel.send(f"LET'S WELCOME {member.name} RAH! RAH! \U0001F389")
-            await general_channel.send(file=File(utils.WELCOME_IMG_PATH))
+            await general_channel.send(file=File(WELCOME_GIF_PATH))
         else:
             await member.dm_channel.send("Welcome Back! YAY! YAY!")
             await general_channel.send(f'{member.name} IS BACK.. WITH SOME SNACKS!')

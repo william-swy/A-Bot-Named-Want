@@ -2,7 +2,7 @@ from discord.ext import commands
 from discord.utils import get
 
 
-class LeaveJoinCog(commands.Cog):
+class LeaveJoinVoiceCog(commands.Cog):
     """commands to let bot join and leave voice channels"""
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
@@ -33,4 +33,4 @@ class LeaveJoinCog(commands.Cog):
 
 def setup(bot: commands.Bot) -> None:
     """Loads LeaveJoinCog"""
-    bot.add_cog(LeaveJoinCog(bot))
+    bot.add_cog(LeaveJoinVoiceCog(bot))

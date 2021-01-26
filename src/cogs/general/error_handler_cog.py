@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from common.Errors import custom_errors
+from common.Errors import botexceptions
 from config.config import BOT_PREFIX
 
 
@@ -14,12 +14,8 @@ class ErrorHandlerCog(commands.Cog):
         """catches exceptions and sends message relating to exception"""
         if isinstance(error, commands.CommandNotFound):
             await ctx.send(f'Sorry I did not catch that... type "{BOT_PREFIX}help" to see what I can do;) ')
-        elif isinstance(error, custom_errors.NoMemberError):
-            await ctx.send('Error 404 Guild Member Not Found...')
-        elif isinstance(error, custom_errors.TooManySongs):
+        elif isinstance(error, botexceptions.TooManySongs):
             await ctx.send("Sorry there are too many songs queued, can't get your song, try again later, sorry")
-        elif isinstance(error, custom_errors.NoCityFound):
-            await ctx.send("Can't find your specified city, double check your city name perhaps?")
 
 
 def setup(bot: commands.Bot) -> None:
